@@ -22,7 +22,7 @@ const Layout = () => {
           right: 0,
           elevation: 0,
           borderTopWidth: 0,
-          height: 60,
+          height: 50,
         },
         tabBarBackground: () => (
           <BlurView
@@ -60,9 +60,13 @@ const Layout = () => {
           tabBarIcon: ({ size, color }) => (
             <FontAwesome5 name="boxes" size={size} color={color} />
           ),
-          headerTitle: "",
-          headerShadowVisible: false,
-          headerStyle: { backgroundColor: Colors.background },
+          header: () => (
+            <CustomHeaderGreeting
+              title="Stock"
+              description="Optimal Inventory Management for Seamless Operations"
+            />
+          ),
+          headerTransparent: true,
         }}
       />
       <Tabs.Screen
