@@ -1,9 +1,9 @@
 import { Image, StyleSheet, Platform, View, Text } from "react-native";
 
-export default function HomeScreen() {
+export default function PurchasesScreen() {
   return (
     <View>
-      <Text>Home page</Text>
+      <Text>Purchases Page</Text>
     </View>
   );
 }

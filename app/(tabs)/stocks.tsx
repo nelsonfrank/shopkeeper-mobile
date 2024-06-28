@@ -1,9 +1,9 @@
 import { Image, StyleSheet, Platform, View, Text } from "react-native";
 
-export default function HomeScreen() {
+export default function StockScreen() {
   return (
     <View>
-      <Text>Home page</Text>
+      <Text>Stock Page</Text>
     </View>
   );
 }
