@@ -5,9 +5,11 @@ import {
   FontAwesome5,
   Entypo,
   Octicons,
+  FontAwesome6,
 } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
-import { Tabs } from "expo-router";
+import { Link, Tabs } from "expo-router";
+import { TouchableOpacity } from "react-native";
 
 const Layout = () => {
   return (
@@ -76,9 +78,14 @@ const Layout = () => {
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name="shopping-cart" size={size} color={color} />
           ),
-          headerTitle: "",
-          headerShadowVisible: false,
-          headerStyle: { backgroundColor: Colors.background },
+          header: () => (
+            <CustomHeaderGreeting
+              title="Purchases"
+              description="Streamline Shopping Experience with Seamless Transactions"
+              displayCart={true}
+            />
+          ),
+          headerTransparent: true,
         }}
       />
       <Tabs.Screen

@@ -1,5 +1,5 @@
 import Colors from "@/constants/Colors";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { View, Text, StyleSheet } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -70,10 +70,12 @@ const CustomHeader = () => {
 export interface CustomHeaderGreetingProps {
   title: string;
   description?: string;
+  displayCart?: boolean;
 }
 export const CustomHeaderGreeting = ({
   title,
   description,
+  displayCart,
 }: CustomHeaderGreetingProps) => {
   const { top } = useSafeAreaInsets();
   let [fontsLoaded, fontError] = useFonts({
@@ -100,7 +102,27 @@ export const CustomHeaderGreeting = ({
           },
         ]}
       >
-        <Text style={styles.greetingTitle}>{title}</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text style={styles.greetingTitle}>{title}</Text>
+
+          {displayCart ? (
+            <Link href={"/help"} asChild>
+              <TouchableOpacity>
+                <FontAwesome6
+                  name="cart-shopping"
+                  size={26}
+                  color={Colors.dark}
+                />
+              </TouchableOpacity>
+            </Link>
+          ) : null}
+        </View>
         {description && (
           <Text style={styles.greetingDescription}>{description}</Text>
         )}
