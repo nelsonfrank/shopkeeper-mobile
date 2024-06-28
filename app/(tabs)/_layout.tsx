@@ -1,3 +1,4 @@
+import CustomHeader, { CustomHeaderGreeting } from "@/components/CustomHeader";
 import Colors from "@/constants/Colors";
 import {
   FontAwesome,
@@ -5,12 +6,14 @@ import {
   Entypo,
   Octicons,
 } from "@expo/vector-icons";
+import { BlurView } from "expo-blur";
 import { Tabs } from "expo-router";
 
 const Layout = () => {
   return (
     <Tabs
       screenOptions={{
+        tabBarActiveTintColor: Colors.primary,
         tabBarStyle: {
           backgroundColor: "transparent",
           position: "absolute",
@@ -21,6 +24,17 @@ const Layout = () => {
           borderTopWidth: 0,
           height: 60,
         },
+        tabBarBackground: () => (
+          <BlurView
+            experimentalBlurMethod={"dimezisBlurView"}
+            intensity={100}
+            tint={"extraLight"}
+            style={{
+              flex: 1,
+              backgroundColor: "rgba(0,0,0,0.05)",
+            }}
+          />
+        ),
       }}
     >
       <Tabs.Screen
@@ -29,6 +43,12 @@ const Layout = () => {
           title: "Home",
           tabBarIcon: ({ size, color }) => (
             <Entypo name="home" size={size} color={color} />
+          ),
+          header: () => (
+            <CustomHeaderGreeting
+              title="Hey, Nelson"
+              description="Good Morning"
+            />
           ),
           headerTransparent: true,
         }}
@@ -40,6 +60,9 @@ const Layout = () => {
           tabBarIcon: ({ size, color }) => (
             <FontAwesome5 name="boxes" size={size} color={color} />
           ),
+          headerTitle: "",
+          headerShadowVisible: false,
+          headerStyle: { backgroundColor: Colors.background },
         }}
       />
       <Tabs.Screen
@@ -49,6 +72,9 @@ const Layout = () => {
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name="shopping-cart" size={size} color={color} />
           ),
+          headerTitle: "",
+          headerShadowVisible: false,
+          headerStyle: { backgroundColor: Colors.background },
         }}
       />
       <Tabs.Screen
@@ -58,7 +84,9 @@ const Layout = () => {
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name="euro" size={size} color={color} />
           ),
-          headerTransparent: true,
+          headerTitle: "",
+          headerShadowVisible: false,
+          headerStyle: { backgroundColor: Colors.background },
         }}
       />
       <Tabs.Screen
@@ -68,6 +96,9 @@ const Layout = () => {
           tabBarIcon: ({ size, color }) => (
             <Octicons name="graph" size={size} color={color} />
           ),
+          headerTitle: "",
+          headerShadowVisible: false,
+          headerStyle: { backgroundColor: Colors.background },
         }}
       />
     </Tabs>

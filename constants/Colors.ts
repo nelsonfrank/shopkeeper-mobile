@@ -10,4 +10,9 @@ export default {
   dark: '#141518',
   gray: '#626D77',
   lightGray: '#D8DCE2',
+  white: "#fff",
+  dashboardColor1: "#e16a6a",
+  dashboardColor2: "#cea2a6",
+  dashboardColor3: "#9b699b",
+  dashboardColor4: "#7c9dd3",
 };
