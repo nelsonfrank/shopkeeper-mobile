@@ -13,6 +13,8 @@ import {
   Platform,
   Alert,
 } from "react-native";
+import axios from "axios";
+import { useAuth } from "@/context/auth-context";
 
 enum SignInType {
   Phone,
@@ -26,19 +28,19 @@ const Page = () => {
   const [password, setPassword] = useState("");
   const keyboardVerticalOffset = Platform.OS === "ios" ? 80 : 0;
   const router = useRouter();
+  const { onLogin } = useAuth();
 
   const onSignIn = async (type: SignInType) => {
-    if (type === SignInType.Phone) {
-      try {
-        const fullPhoneNumber = ``;
+    try {
+      const response = await onLogin!(email, password);
 
-        router.push({
-          pathname: "(tabs)",
-          params: { phone: fullPhoneNumber, signin: "true" },
-        });
-      } catch (err) {
-        console.log("error", JSON.stringify(err, null, 2));
-      }
+      router.push({
+        pathname: "/(authenticated)/(tabs)",
+        params: { response, signin: "true" },
+      });
+    } catch (err) {
+      console.log({ err });
+      console.log("error", JSON.stringify(err, null, 2));
     }
   };
 
@@ -58,7 +60,6 @@ const Page = () => {
             style={[styles.input, { flex: 1 }]}
             placeholder="Email"
             placeholderTextColor={Colors.gray}
-            keyboardType="default"
             value={email}
             onChangeText={setEmail}
           />
@@ -68,7 +69,7 @@ const Page = () => {
             style={[styles.input, { flex: 1 }]}
             placeholder="Password"
             placeholderTextColor={Colors.gray}
-            keyboardType="default"
+            secureTextEntry={true}
             value={password}
             onChangeText={setPassword}
           />

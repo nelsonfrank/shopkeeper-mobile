@@ -13,7 +13,7 @@ import {
   Platform,
   Alert,
 } from "react-native";
-
+import { useAuth } from "@/context/auth-context";
 enum SignInType {
   Phone,
   Email,
@@ -29,14 +29,22 @@ const Page = () => {
   const keyboardVerticalOffset = Platform.OS === "ios" ? 80 : 0;
   const router = useRouter();
 
+  const { onRegister } = useAuth();
   const onSignIn = async (type: SignInType) => {
-    if (type === SignInType.Phone) {
+    if (type === SignInType.Email) {
       try {
-        const fullPhoneNumber = ``;
+        const payload = {
+          firstName,
+          lastName,
+          email,
+          password,
+        };
+
+        const response = await onRegister!(payload);
 
         router.push({
-          pathname: "(tabs)",
-          params: { phone: fullPhoneNumber, signin: "true" },
+          pathname: "/(authenticated)/(tabs)",
+          params: { response, signin: "true" },
         });
       } catch (err) {
         console.log("error", JSON.stringify(err, null, 2));
@@ -60,7 +68,6 @@ const Page = () => {
             style={[styles.input, { flex: 1 }]}
             placeholder="First Name"
             placeholderTextColor={Colors.gray}
-            keyboardType="default"
             value={firstName}
             onChangeText={setFirstName}
           />
@@ -68,7 +75,6 @@ const Page = () => {
             style={[styles.input, { flex: 1 }]}
             placeholder="Last Name"
             placeholderTextColor={Colors.gray}
-            keyboardType="default"
             value={lastName}
             onChangeText={setLastName}
           />
@@ -89,6 +95,7 @@ const Page = () => {
             placeholder="Password"
             placeholderTextColor={Colors.gray}
             keyboardType="default"
+            secureTextEntry={true}
             value={password}
             onChangeText={setPassword}
           />
@@ -100,7 +107,7 @@ const Page = () => {
             password !== "" || email !== "" ? styles.enabled : styles.disabled,
             { marginBottom: 20, marginTop: 20 },
           ]}
-          onPress={() => onSignIn(SignInType.Phone)}
+          onPress={() => onSignIn(SignInType.Email)}
         >
           <Text style={defaultStyles.buttonText}>Register</Text>
         </TouchableOpacity>

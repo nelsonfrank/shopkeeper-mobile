@@ -1,5 +1,5 @@
 import { useFonts } from "expo-font";
-import { Link, Stack, useRouter } from "expo-router";
+import { Link, Stack, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
@@ -10,6 +10,12 @@ import Colors from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
+import { AuthProvider, useAuth } from "@/context/auth-context";
+
+export {
+  // Catch any errors thrown by the Layout component.
+  ErrorBoundary,
+} from "expo-router";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -17,8 +23,10 @@ SplashScreen.preventAutoHideAsync();
 const InitialLayout = () => {
   const colorScheme = useColorScheme();
   const router = useRouter();
+  const { authState } = useAuth();
+  const segments = useSegments();
 
-  const [loaded] = useFonts({
+  const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
 
@@ -27,6 +35,20 @@ const InitialLayout = () => {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  useEffect(() => {
+    if (error) throw error;
+  }, [error]);
+
+  useEffect(() => {
+    const inAuthGroup = segments[0] === "(authenticated)";
+
+    if (authState?.authenticated && !inAuthGroup) {
+      router.replace("/(authenticated)/(tabs)");
+    } else if (!authState?.authenticated && loaded) {
+      router.replace("/");
+    }
+  }, [authState?.authenticated]);
 
   if (!loaded) {
     return null;
@@ -74,7 +96,10 @@ const InitialLayout = () => {
           ),
         }}
       />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="(authenticated)/(tabs)"
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="+not-found" />
     </Stack>
   );
@@ -82,9 +107,11 @@ const InitialLayout = () => {
 
 export default function RootLayout() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <StatusBar style="light" />
-      <InitialLayout />
-    </GestureHandlerRootView>
+    <AuthProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <StatusBar style="light" />
+        <InitialLayout />
+      </GestureHandlerRootView>
+    </AuthProvider>
   );
 }
